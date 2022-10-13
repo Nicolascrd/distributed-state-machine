@@ -12,15 +12,15 @@ import (
 const voteEndpoint string = "/vote"
 const heartbeatEndpoint string = "/heartBeat"
 const updateSysEndpoint string = "/update-sys" // for leader to update system knowledge among followers
-const requestLog string = "/request-log"
-const addLog string = "/add-log"
+const requestLogEndpoint string = "/request-log"
+const addLogEndpoint string = "/add-log"
 
 func (sm *smServer) launchStateMachineServer() {
 	http.HandleFunc(voteEndpoint, sm.voteHandler)
 	http.HandleFunc(heartbeatEndpoint, sm.heartBeatHandler)
 	http.HandleFunc(updateSysEndpoint, sm.updateSysHandler)
-	http.HandleFunc(requestLog, sm.requestLogHandler)
-	http.HandleFunc(addLog, sm.addLogHandler)
+	http.HandleFunc(requestLogEndpoint, sm.requestLogHandler)
+	http.HandleFunc(addLogEndpoint, sm.addLogHandler)
 
 	err := http.ListenAndServe(sm.addr, nil)
 	if err != nil {
