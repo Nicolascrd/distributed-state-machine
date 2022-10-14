@@ -21,15 +21,19 @@ Let's compare some consensus algorithms, in the context of building a distribute
 ## Versions
 
 - master branch will implement the [Raft consensus algorithm](https://raft.github.io/raft.pdf).
-- snowball branch will implement the [Snowball consensus algorithm](https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf)
+- slush, snowflake and snowball branches will implement the differents versions of the [Snowball consensus algorithm](https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf)
+
+Snowball is a protocol to achieve binary consensus. For now, we will assume one side is the query from the client. The other would be any other value (except the empty string). The neutral state is nothing in the log at that position (empty string). 
 
 ## Testing
 
 Select your parameters in config.json :
-
+With any of the snowball algorithm, it is VERY important to change your parameters according to the number of nodes that you want to have in your system
 ```
 {
-    "updateSystem" : If true the systems remap when one node is failing completely (failing to reply to request within 200ms)
+    "sampleSize": size of the sample for each query made by a node (k in the avalanche paper),
+    "majorityThreshold": majority threshold of the queries to be considered validated (same color) (alpha in the avalanche paper),
+    "numberOfRounds": number of rounds to reach consensus whp (with high probability) (m in the avalanche paper)
 }
 ```
 

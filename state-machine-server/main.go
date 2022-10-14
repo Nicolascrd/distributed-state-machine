@@ -18,10 +18,6 @@ type smServer struct {
 	logger      log.Logger     // associated logger
 	addr        string         // URL in container eg centra-calcu-1:8000
 	ID          int            // server number e.g. 1
-	leaderID    int            // server number corresponding to known leader
-	leaderAddr  string         // port associated to leader
-	status      int            // 1 for leader, 2 for follower, 3 for candidate not sure I should keep that
-	hbReceived  bool           // true if a heart beat from the leader was received, reset to false at each tick from ticker
 	currentTerm int            // term is the period
 	votedFor    int            // id of node the server voted for in the current term
 	record      map[int]string // the distributed record
@@ -30,7 +26,9 @@ type smServer struct {
 }
 
 type config struct {
-	UpdateSystem bool `json:"updateSystem"`
+	MajorityThreshold int `json:"majorityThreshold"`
+	SampleSize        int `json:"sampleSize"`
+	NumberOfRounds    int `json:"numberOfRounds"`
 }
 
 var globalConfig config
@@ -39,7 +37,7 @@ func main() {
 	fmt.Println("Hello State Machine")
 	args := os.Args[1:]
 	if len(args) != 2 {
-		fmt.Println("Wrong number of arguments in command line, expecting only 2 numbers between 0 and 99 and one bool")
+		fmt.Println("Wrong number of arguments in command line, expecting only 2 numbers between 0 and 99")
 		return
 	}
 
@@ -76,7 +74,7 @@ func main() {
 	configFile.Close()
 	fmt.Println("config : ", globalConfig)
 	sm := newStateMachineServer(ind, tot)
-	go sm.launchTicker() // initiate timeouts
+	// go sm.launchTicker() // initiate timeouts
 
 	sm.launchStateMachineServer()
 }
@@ -103,7 +101,6 @@ func newStateMachineServer(num int, tot int) *smServer {
 		addr:        buildAddress(num),
 		timeout:     c,
 		sys:         sys,
-		status:      2, // every node starts a follower
 		currentTerm: 0, // current term is incremented and starts at 1 at first apply
 		record:      make(map[int]string),
 	}

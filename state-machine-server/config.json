@@ -1,3 +1,5 @@
 {
-    "updateSystem": false
+    "sampleSize": 5,
+    "majorityThreshold": 3,
+    "numberOfRounds": 20
 }

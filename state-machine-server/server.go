@@ -9,16 +9,10 @@ import (
 	"time"
 )
 
-const voteEndpoint string = "/vote"
-const heartbeatEndpoint string = "/heartBeat"
-const updateSysEndpoint string = "/update-sys" // for leader to update system knowledge among followers
 const requestLogEndpoint string = "/request-log"
 const addLogEndpoint string = "/add-log"
 
 func (sm *smServer) launchStateMachineServer() {
-	http.HandleFunc(voteEndpoint, sm.voteHandler)
-	http.HandleFunc(heartbeatEndpoint, sm.heartBeatHandler)
-	http.HandleFunc(updateSysEndpoint, sm.updateSysHandler)
 	http.HandleFunc(requestLogEndpoint, sm.requestLogHandler)
 	http.HandleFunc(addLogEndpoint, sm.addLogHandler)
 
