@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"time"
 )
 
 type system struct {
@@ -15,11 +14,11 @@ type system struct {
 }
 
 type smServer struct {
-	logger      log.Logger     // associated logger
-	addr        string         // URL in container eg centra-calcu-1:8000
-	ID          int            // server number e.g. 1
-	record      map[int]string // the distributed record
-	sys         system // each node knows the system
+	logger log.Logger     // associated logger
+	addr   string         // URL in container eg centra-calcu-1:8000
+	ID     int            // server number e.g. 1
+	record map[int]string // the distributed record
+	sys    system         // each node knows the system
 }
 
 type config struct {
@@ -80,7 +79,6 @@ func newStateMachineServer(num int, tot int) *smServer {
 	// tot : total number of servers
 
 	l := log.New(log.Writer(), "SMServer - "+fmt.Sprint(num)+"  ", log.Ltime)
-	c := make(chan time.Time)
 
 	addresses := make(map[int]string)
 	for i := 1; i <= tot; i++ {
@@ -92,13 +90,11 @@ func newStateMachineServer(num int, tot int) *smServer {
 	}
 
 	return &smServer{
-		logger:      *l,
-		ID:          num,
-		addr:        buildAddress(num),
-		timeout:     c,
-		sys:         sys,
-		currentTerm: 0, // current term is incremented and starts at 1 at first apply
-		record:      make(map[int]string),
+		logger: *l,
+		ID:     num,
+		addr:   buildAddress(num),
+		sys:    sys,
+		record: make(map[int]string),
 	}
 }
 
