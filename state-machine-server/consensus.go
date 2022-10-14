@@ -10,13 +10,8 @@ import (
 
 func (sm *smServer) initiateQuery(req addLogReq) (bool, error) {
 	// pick a sample of the network
-	s := make([]int, sm.sys.NumberOfNodes-1)
-	for i := range s {
-		s[i] = i + 1 // nodes number start at 1
-	}
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(s), func(i, j int) { s[i], s[j] = s[j], s[i] })
-	s = s[:globalConfig.SampleSize]
+
+	s := sampleNetwork(sm.ID, sm.sys.NumberOfNodes)
 	sm.logger.Printf("Initiating query with sample %v", s)
 
 	var wg sync.WaitGroup
@@ -62,4 +57,20 @@ func (sm *smServer) queryNode(addr string, req addLogReq) (bool, error) {
 		return false, err
 	}
 	return addLogAns.Success, nil
+}
+
+func sampleNetwork(excludedID int, numberOfNodes int) []int {
+	s := make([]int, numberOfNodes-1)
+	var index int
+	for id := 1; id <= numberOfNodes; id++ { // nodes number start at 1
+		if id == excludedID {
+			continue
+		}
+		s[index] = id
+		index++
+	}
+	rand.Seed(time.Now().UnixNano())
+	rand.Shuffle(len(s), func(i, j int) { s[i], s[j] = s[j], s[i] })
+	s = s[:globalConfig.SampleSize]
+	return s
 }
