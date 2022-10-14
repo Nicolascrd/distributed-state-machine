@@ -16,14 +16,20 @@ func (sm *smServer) loopInitiateQuery(req addLogReq) {
 			sm.logger.Fatalf("Cannot initiate Query : %s", err.Error())
 			return
 		}
+
 		if success {
 			// no flip, increment
 			sm.cnt++
 		} else {
-			// flip (because the other side can be anything, flip to "")
-			delete(sm.record, req.Position)
-			// reset counter
-			sm.cnt = 0
+			if sm.cnt == 1 {
+				// flip (because the other side can be anything, flip to "")
+				delete(sm.record, req.Position)
+				// reset counter
+				sm.cnt = 0
+
+			} else {
+				sm.cnt--
+			}
 		}
 		if sm.cnt == globalConfig.CounterThreshold {
 			// node is "decided"
