@@ -33,7 +33,7 @@ With any of the snowball algorithm, it is VERY important to change your paramete
 {
     "sampleSize": size of the sample for each query made by a node (k in the avalanche paper),
     "majorityThreshold": majority threshold of the queries to be considered validated (same color) (alpha in the avalanche paper),
-    "numberOfRounds": number of rounds to reach consensus whp (with high probability) (m in the avalanche paper)
+    "counterThreshold": counter threshold above which the color can effectively switch (beta in the avalanche paper)
 }
 ```
 

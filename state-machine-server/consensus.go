@@ -8,6 +8,32 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+func (sm *smServer) loopInitiateQuery(req addLogReq) {
+	for {
+		sm.logger.Printf("initiate query, req : %v", req)
+		success, err := sm.initiateQuery(req)
+		if err != nil {
+			sm.logger.Fatalf("Cannot initiate Query : %s", err.Error())
+			return
+		}
+		if success {
+			// no flip, increment
+			sm.cnt++
+		} else {
+			// flip (because the other side can be anything, flip to "")
+			delete(sm.record, req.Position)
+			// reset counter
+			sm.cnt = 0
+		}
+		if sm.cnt == globalConfig.CounterThreshold {
+			// node is "decided"
+			sm.record[req.Position] = req.Content
+			sm.logger.Printf("Node is decided at position %d with value %s", req.Position, req.Content)
+			return
+		}
+	}
+}
+
 func (sm *smServer) initiateQuery(req addLogReq) (bool, error) {
 	// pick a sample of the network
 

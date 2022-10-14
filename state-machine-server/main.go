@@ -18,13 +18,14 @@ type smServer struct {
 	addr   string         // URL in container eg centra-calcu-1:8000
 	ID     int            // server number e.g. 1
 	record map[int]string // the distributed record
+	cnt    int            // the counter
 	sys    system         // each node knows the system
 }
 
 type config struct {
 	MajorityThreshold int `json:"majorityThreshold"`
 	SampleSize        int `json:"sampleSize"`
-	NumberOfRounds    int `json:"numberOfRounds"`
+	CounterThreshold  int `json:"counterThreshold"`
 }
 
 var globalConfig config

@@ -70,19 +70,6 @@ func (sm *smServer) addLogHandler(w http.ResponseWriter, r *http.Request) {
 	}, &sm.logger)
 
 	// "... and initiates its own query"
-	for i := 0; i < globalConfig.NumberOfRounds; i++ {
-		sm.logger.Printf("initiate query, req : %v", req)
-		success, err := sm.initiateQuery(req)
-		if err != nil {
-			sm.logger.Fatalf("Cannot initiate Query : %s", err.Error())
-			return
-		}
-		if success {
-			// no flip
-		} else {
-			// flip (because the other side can be anything, flip to "")
-			delete(sm.record, req.Position)
-		}
-	}
+	go sm.loopInitiateQuery(req)
 	return
 }
