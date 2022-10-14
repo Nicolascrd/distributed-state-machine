@@ -1,3 +1,5 @@
 {
-    "updateSystem": false
+    "sampleSize": 2,
+    "majorityThreshold": 2,
+    "counterThreshold": 3
 }
