@@ -91,7 +91,7 @@ func postJSON(addr string, content any, logger *log.Logger, extendedDelay bool) 
 	resp, err := client.Do(req)
 
 	if err != nil {
-		logger.Printf("Cannot post JSON to %s : %s", addr, err.Error())
+		// log already in function calling postJSON
 		return nil, err
 	}
 	return resp, nil
