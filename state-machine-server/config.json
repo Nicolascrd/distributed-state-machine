@@ -1,5 +1,5 @@
 {
-    "sampleSize": 5,
-    "majorityThreshold": 3,
-    "numberOfRounds": 20
+  "sampleSize": 2,
+  "majorityThreshold": 2,
+  "numberOfRounds": 5
 }
