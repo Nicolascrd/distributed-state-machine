@@ -25,7 +25,7 @@ func (sm *smServer) loopInitiateQuery(req addLogReq) {
 			// reset counter
 			sm.cnt = 0
 		}
-		if sm.cnt == globalConfig.CounterThreshold {
+		if sm.cnt >= globalConfig.CounterThreshold {
 			// node is "decided"
 			sm.record[req.Position] = req.Content
 			sm.logger.Printf("Node is decided at position %d with value %s", req.Position, req.Content)
