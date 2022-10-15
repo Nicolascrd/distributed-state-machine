@@ -20,12 +20,12 @@ Let's compare some consensus algorithms, in the context of building a distribute
 
 ## Versions
 
-- master branch will implement the [Raft consensus algorithm](https://raft.github.io/raft.pdf).
-- snowball branch will implement the [Snowball consensus algorithm](https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf)
+- master branch implements the [Raft consensus algorithm](https://raft.github.io/raft.pdf).
+- slush, snowflake and snowball branches implement the different iterations of the [Snowball consensus algorithm](https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf)
 
 ## Testing
 
-Select your parameters in config.json :
+Select your parameters in config.json (Parameters are different depending on the branch you are on and the consensus algorithm that you are using) :
 
 ```
 {
