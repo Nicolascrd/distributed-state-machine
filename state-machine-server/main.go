@@ -14,12 +14,13 @@ type system struct {
 }
 
 type smServer struct {
-	logger log.Logger     // associated logger
-	addr   string         // URL in container eg centra-calcu-1:8000
-	ID     int            // server number e.g. 1
-	record map[int]string // the distributed record
-	cnt    int            // the counter
-	sys    system         // each node knows the system
+	logger                  log.Logger     // associated logger
+	addr                    string         // URL in container eg centra-calcu-1:8000
+	ID                      int            // server number e.g. 1
+	record                  map[int]string // the distributed record
+	cnt                     int            // the counter
+	counterNumberOfRequests int            // count number of requests to track efficiency
+	sys                     system         // each node knows the system
 }
 
 type config struct {
