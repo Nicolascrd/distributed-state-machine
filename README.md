@@ -64,13 +64,13 @@ curl -X POST localhost:800<1 2 3>/request-log -H 'Content-Type: application/json
 Check the logs of container <1 2 3> with :
 
 ```
-docker logs --follow decentra-calcu-<1 2 3>
+docker logs --follow sm-server-<1 2 3>
 ```
 \
 You can also try crashing containers with :
 
 ```
-docker stop decentra-calcu-<1 2 3>
+docker stop sm-server-<1 2 3>
 ```
 \
 See what happens in the logs as the consensus algorithm run !
