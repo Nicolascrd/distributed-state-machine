@@ -40,6 +40,7 @@ func (sm *smServer) initiateQuery(req addLogReq) (bool, error) {
 func (sm *smServer) queryNode(addr string, req addLogReq) (bool, error) {
 	// return true, nil if reply with the same value
 	// return false, nil if reply with any other value
+	sm.counterNumberOfRequests++
 	resp, err := postJSON(addr+addLogEndpoint, req, &sm.logger, false)
 	if err != nil {
 		sm.logger.Printf("Error posting JSON at %s : %s", addr, err.Error())
