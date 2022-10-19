@@ -14,6 +14,7 @@ const heartbeatEndpoint string = "/heartBeat"
 const updateSysEndpoint string = "/update-sys" // for leader to update system knowledge among followers
 const requestLogEndpoint string = "/request-log"
 const addLogEndpoint string = "/add-log"
+const requestDataEndpoint string = "/request-data"
 
 func (sm *smServer) launchStateMachineServer() {
 	http.HandleFunc(voteEndpoint, sm.voteHandler)
@@ -21,6 +22,7 @@ func (sm *smServer) launchStateMachineServer() {
 	http.HandleFunc(updateSysEndpoint, sm.updateSysHandler)
 	http.HandleFunc(requestLogEndpoint, sm.requestLogHandler)
 	http.HandleFunc(addLogEndpoint, sm.addLogHandler)
+	http.HandleFunc(requestDataEndpoint, sm.requestDataHandler)
 
 	err := http.ListenAndServe(sm.addr, nil)
 	if err != nil {

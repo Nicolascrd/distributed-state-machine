@@ -99,6 +99,7 @@ func (sm *smServer) addLogHandler(w http.ResponseWriter, r *http.Request) {
 func (sm *smServer) transferNewLogRequest(req addLogReq) (bool, error) {
 	// for followers to transfer the new log request to leader
 	req.Internal = true
+	sm.counterRequestsClient++
 	resp, err := postJSON(sm.leaderAddr+addLogEndpoint, req, &sm.logger, true)
 	if err != nil {
 		return false, err
@@ -127,6 +128,7 @@ func (sm *smServer) transferNewLog(req addLogReq) {
 		wg.Add(1)
 		go func(ad string, numPosts *int, numErrors *int) {
 			defer wg.Done()
+			sm.counterRequestsClient++
 			_, err := postJSON(ad+addLogEndpoint, req, &sm.logger, false)
 			if err != nil {
 				*numErrors++

@@ -175,6 +175,7 @@ func (sm *smServer) leaderSendsHB() {
 func (sm *smServer) requestVote(addr string) bool {
 	var response voteResponse
 	sm.logger.Printf("Request vote sent to %s", addr)
+	sm.counterRequestsConsensus++
 	resp, err := postJSON(addr+voteEndpoint, voteRequest{CandidateID: sm.ID, Term: sm.currentTerm}, &sm.logger, false)
 	if err != nil {
 		sm.logger.Printf("Error requesting vote at %s : %s", addr, err.Error())
@@ -194,6 +195,7 @@ func (sm *smServer) requestVote(addr string) bool {
 
 func (sm *smServer) sendHB(addr string) bool {
 	var response heatBeatResponse
+	sm.counterRequestsConsensus++
 	resp, err := postJSON(addr+heartbeatEndpoint, heartBeatRequest{LeaderID: sm.ID, LeaderAddr: sm.addr, LeaderTerm: sm.currentTerm}, &sm.logger, false)
 
 	if err != nil {
@@ -244,6 +246,7 @@ func (sm *smServer) newSys(doFollow []int) {
 		wg.Add(1)
 		go func(addr string) {
 			defer wg.Done()
+			sm.counterRequestsConsensus++
 			postJSON(addr+updateSysEndpoint, sm.sys, &sm.logger, false)
 		}(addr)
 	}
