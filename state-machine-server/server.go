@@ -11,10 +11,12 @@ import (
 
 const requestLogEndpoint string = "/request-log"
 const addLogEndpoint string = "/add-log"
+const dataEndpoint string = "/request-data"
 
 func (sm *smServer) launchStateMachineServer() {
 	http.HandleFunc(requestLogEndpoint, sm.requestLogHandler)
 	http.HandleFunc(addLogEndpoint, sm.addLogHandler)
+	http.HandleFunc(dataEndpoint, sm.dataHandler)
 
 	err := http.ListenAndServe(sm.addr, nil)
 	if err != nil {
