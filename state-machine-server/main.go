@@ -78,6 +78,7 @@ func main() {
 	configFile.Close()
 	fmt.Println("config : ", globalConfig)
 	sm := newStateMachineServer(ind, tot)
+	fmt.Println("all addresses : ", sm.sys.Addresses, sm.sys.NumberOfNodes)
 	go sm.launchTicker() // initiate timeouts
 
 	sm.launchStateMachineServer()

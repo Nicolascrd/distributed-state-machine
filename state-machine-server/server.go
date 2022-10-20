@@ -72,6 +72,7 @@ func postJSON(addr string, content any, logger *log.Logger, extendedDelay bool) 
 	/* extendedDelay makes timeout delay 300ms instead of 200ms because if config does not update system,
 	   the leader will wait 300ms for failing nodes, thereby making the node requesting a little more.
 	*/
+	logger.Printf("POSTJSON AT %s with content %v", addr, content)
 	thebytes, err := marshalJSON(content)
 	if err != nil {
 		logger.Printf("Cannot marshal post JSON: %s", err.Error())

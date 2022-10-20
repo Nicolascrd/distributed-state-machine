@@ -35,7 +35,7 @@ func (sm *smServer) requestLogHandler(w http.ResponseWriter, r *http.Request) {
 
 	log, ok := sm.record[req.Position]
 	if !ok {
-		http.Error(w, fmt.Sprintf("No entry for position %d", req.Position), http.StatusNoContent)
+		http.Error(w, fmt.Sprintf("No entry for position %d", req.Position), http.StatusNotFound)
 		return
 	}
 	io.WriteString(w, log)
@@ -53,6 +53,7 @@ func (sm *smServer) addLogHandler(w http.ResponseWriter, r *http.Request) {
 
 	_, ok := sm.record[req.Position]
 	if ok {
+		sm.logger.Printf("Map already contains a log at position %d", req.Position)
 		replyJSON(w, addLogAnswer{
 			Success: false,
 		}, &sm.logger)
@@ -60,6 +61,7 @@ func (sm *smServer) addLogHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if sm.status == 1 {
 		// node is leader
+		sm.logger.Printf("Node is leader and the new record was saved at position %d", req.Position)
 		sm.record[req.Position] = req.Content
 		sm.transferNewLog(req)
 		replyJSON(w, addLogAnswer{
@@ -69,14 +71,16 @@ func (sm *smServer) addLogHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// node is not leader
 	if req.Internal {
+		sm.logger.Printf("Node is follower, receiving a request from the leader and the new record was saved at position %d", req.Position)
 		// request comes from leader, just update node state
 		sm.record[req.Position] = req.Content
 		replyJSON(w, addLogAnswer{
-			Success: false,
+			Success: true,
 		}, &sm.logger)
 		return
 	}
 	// request comes from client, transfer to leader
+	sm.logger.Printf("Node is not leader and the request was transmitted")
 	success, err := sm.transferNewLogRequest(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -121,6 +125,7 @@ func (sm *smServer) transferNewLog(req addLogReq) {
 	var wg sync.WaitGroup
 	var numPosts int
 	var numErrors int
+	req.Internal = true
 	for _, addr := range sm.sys.Addresses {
 		if addr == sm.addr {
 			continue
