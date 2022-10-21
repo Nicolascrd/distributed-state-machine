@@ -37,7 +37,7 @@ Select your parameters in config.json (Parameters are different depending on the
 Launch the containers with :
 
 ```
-sh launch.sh <3 4 5 6>
+bash launch.sh <3 4 5 6>
 # number of containers to start (min 3 max 99)
 ```
 
