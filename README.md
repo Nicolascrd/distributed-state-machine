@@ -41,7 +41,7 @@ With any of the snowball algorithm, it is VERY important to change your paramete
 Launch the containers with :
 
 ```
-sh launch.sh <3 4 5 6>
+bash launch.sh <3 4 5 6>
 # number of containers to start (min 3 max 99)
 ```
 
