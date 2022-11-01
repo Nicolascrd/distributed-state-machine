@@ -19,19 +19,23 @@ func (sm *smServer) loopInitiateQuery(req addLogReq) {
 
 		if success {
 			// no flip, increment
-			sm.cnt++
+			if _, ok := sm.cnt[req.Position]; ok {
+				sm.cnt[req.Position]++
+			} else {
+				sm.cnt[req.Position] = 1
+			}
 		} else {
-			if sm.cnt == 1 {
+			if sm.cnt[req.Position] == 1 {
 				// flip (because the other side can be anything, flip to "")
 				delete(sm.record, req.Position)
 				// reset counter
-				sm.cnt = 0
+				sm.cnt[req.Position] = 0
 
 			} else {
-				sm.cnt--
+				sm.cnt[req.Position]--
 			}
 		}
-		if sm.cnt >= globalConfig.CounterThreshold {
+		if sm.cnt[req.Position] >= globalConfig.CounterThreshold {
 			// node is "decided"
 			sm.record[req.Position] = req.Content
 			sm.logger.Printf("Node is decided at position %d with value %s", req.Position, req.Content)

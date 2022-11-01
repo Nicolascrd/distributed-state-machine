@@ -18,7 +18,7 @@ type smServer struct {
 	addr                    string         // URL in container eg centra-calcu-1:8000
 	ID                      int            // server number e.g. 1
 	record                  map[int]string // the distributed record
-	cnt                     int            // the counter
+	cnt                     map[int]int    // the counter (one per position)
 	counterNumberOfRequests int            // count number of requests to track efficiency
 	sys                     system         // each node knows the system
 }
@@ -97,6 +97,7 @@ func newStateMachineServer(num int, tot int) *smServer {
 		addr:   buildAddress(num),
 		sys:    sys,
 		record: make(map[int]string),
+		cnt:    make(map[int]int),
 	}
 }
 
